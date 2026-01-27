@@ -146,7 +146,7 @@ export default function HomePage() {
       <div className="relative mx-auto flex w-full max-w-[860px] flex-col gap-10">
         <header className="flex flex-col items-center gap-8 text-center">
           <div className="space-y-4">
-            <h1 className="text-6xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="text-7xl sm:text-9xl font-black mb-6 tracking-tight animate-fade-up">
               <span className="title-main logo-text">Mark2Text</span>
             </h1>
             <p className="mx-auto max-w-2xl text-base text-[var(--page-muted)]">
