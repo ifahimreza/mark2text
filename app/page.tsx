@@ -106,61 +106,86 @@ export default function HomePage() {
       setCleanup((prev) => ({ ...prev, [key]: Boolean(checked) }));
 
   return (
-    <main className="relative min-h-screen px-4 py-10 sm:px-6 lg:px-10">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-10 top-16 h-72 w-72 rounded-full bg-orange-100/50 blur-[160px] dark:bg-orange-500/5" />
-        <div className="absolute right-10 top-10 h-80 w-80 rounded-full bg-slate-100/70 blur-[180px] dark:bg-slate-800/40" />
+    <main className="relative min-h-screen px-4 py-12 sm:px-6 lg:px-10">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/2 top-[-220px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-orange-500/20 blur-[180px]" />
+        <div className="absolute bottom-[-200px] right-[-120px] h-[440px] w-[440px] rounded-full bg-orange-400/10 blur-[200px]" />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-[1360px] flex-col gap-10">
-        <header className="flex flex-col items-center gap-6 text-center">
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500 dark:text-slate-300">
-              <span className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900/60">
-                mark2text.com
+      <div className="relative mx-auto flex w-full max-w-[860px] flex-col gap-10">
+        <header className="flex flex-col items-center gap-8 text-center">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-semibold tracking-tight text-slate-100 sm:text-5xl">
+              <span className="bg-gradient-to-r from-orange-200 via-orange-300 to-orange-500 bg-clip-text text-transparent">
+                Mark2Text
               </span>
-              <span className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900/60">
+            </h1>
+            <p className="mx-auto max-w-2xl text-base text-slate-300">
+              A minimalist, client-side Markdown to text converter for fast, secure, and
+              SEO-ready copy. Convert Markdown to clean plain text, rich text, or HTML in
+              your browser.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-300">
+              <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
                 Client-side only
               </span>
-              <span className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900/60">
-                Markdown → text
+              <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
+                No uploads or tracking
               </span>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-base text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
-                  M2
-                </span>
-                <span>Mark 2 Text</span>
-              </div>
-              <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
-                Markdown to text, instantly
-              </p>
-              <h1 className="text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl dark:text-slate-100">
-                Convert Markdown into clean text.
-                <span className="block">Share it anywhere instantly.</span>
-              </h1>
-              <p className="mx-auto max-w-2xl text-sm text-slate-600 dark:text-slate-300">
-                Paste Markdown, run a quick conversion, then refine and copy the
-                plain text, rich text, or sanitized HTML output.
-              </p>
+              <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
+                Plain text output
+              </span>
             </div>
           </div>
         </header>
 
-        <section className="grid gap-6 lg:grid-cols-2">
+        <section className="grid gap-4 md:grid-cols-3">
+          {[
+            {
+              title: "Paste",
+              description: "Drop Markdown into the input area."
+            },
+            {
+              title: "Convert",
+              description: "Click Convert to refresh the output."
+            },
+            {
+              title: "Copy or download",
+              description: "Grab plain text, rich text, or HTML."
+            }
+          ].map((step, index) => (
+            <div
+              key={step.title}
+              className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-4 text-sm text-slate-300"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] text-orange-200/60">
+                Step {index + 1}
+              </p>
+              <h2 className="mt-2 text-base font-semibold text-slate-100">
+                {step.title}
+              </h2>
+              <p className="mt-2 text-sm text-slate-300">{step.description}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
-            <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60">
-              <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-red-400/80" />
-                  <span className="h-3 w-3 rounded-full bg-amber-400/80" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+            <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-orange-200/10 px-4 py-3">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-orange-200/60">
+                    Source input
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Paste or type Markdown content below.
+                  </p>
                 </div>
-                <div className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
-                  mark2text.com
-                </div>
-                <Button size="sm" onClick={handleConvert}>
+                <Button
+                  size="sm"
+                  onClick={handleConvert}
+                  className="bg-orange-500 text-slate-900 hover:bg-orange-400"
+                >
                   Convert
                 </Button>
               </div>
@@ -168,13 +193,16 @@ export default function HomePage() {
                 <Textarea
                   value={markdown}
                   onChange={(event) => setMarkdown(event.target.value)}
-                  className="min-h-[360px] border-0 bg-transparent text-slate-900 shadow-none focus-visible:ring-0 dark:text-slate-100"
+                  className="min-h-[360px] border-0 bg-transparent text-slate-100 shadow-none focus-visible:ring-0"
                 />
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900/60">
-              <div className="flex flex-wrap gap-6 text-sm text-slate-600 dark:text-slate-300">
+            <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-orange-200/60">
+                Cleanup options
+              </p>
+              <div className="flex flex-wrap gap-6 text-sm text-slate-300">
                 <label className="flex items-center gap-2">
                   <Checkbox
                     checked={cleanup.removeExtraBlankLines}
@@ -201,31 +229,46 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
+            <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                  Preview
-                  <select
-                    value={activeTab}
-                    onChange={(event) => setActiveTab(event.target.value as Tab)}
-                    className="rounded-md border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-none outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                  >
-                    <option value="plain">Plain Text</option>
-                    <option value="rich">Rich Text</option>
-                    <option value="html">HTML</option>
-                  </select>
-                </label>
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-orange-200/60">
+                    Output
+                  </p>
+                  <label className="flex items-center gap-2 text-sm text-slate-300">
+                    Format
+                    <select
+                      value={activeTab}
+                      onChange={(event) => setActiveTab(event.target.value as Tab)}
+                      className="rounded-md border border-orange-200/20 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-100 shadow-none outline-none transition focus:border-orange-300"
+                    >
+                      <option value="plain">Plain Text</option>
+                      <option value="rich">Rich Text</option>
+                      <option value="html">HTML</option>
+                    </select>
+                  </label>
+                </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="secondary" size="sm" onClick={handleCopy}>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleCopy}
+                    className="bg-orange-500/10 text-orange-100 hover:bg-orange-500/20"
+                  >
                     Copy
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleDownload}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownload}
+                    className="border-orange-200/30 text-orange-100 hover:bg-orange-500/10"
+                  >
                     Download
                   </Button>
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-100">
+              <div className="mt-4 rounded-xl border border-orange-200/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100">
                 {activeTab === "plain" && (
                   <Textarea
                     value={outputs.plain}
@@ -235,7 +278,7 @@ export default function HomePage() {
                         plain: event.target.value
                       }))
                     }
-                    className="min-h-[320px] border-0 bg-transparent text-slate-900 shadow-none focus-visible:ring-0 dark:text-slate-100"
+                    className="min-h-[320px] border-0 bg-transparent text-slate-100 shadow-none focus-visible:ring-0"
                   />
                 )}
                 {activeTab === "html" && (
@@ -247,12 +290,12 @@ export default function HomePage() {
                         html: event.target.value
                       }))
                     }
-                    className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-slate-700 shadow-none focus-visible:ring-0 dark:text-slate-200"
+                    className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-orange-100/80 shadow-none focus-visible:ring-0"
                   />
                 )}
                 {activeTab === "rich" && (
                   <div
-                    className="min-h-[320px] rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-900 dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100"
+                    className="min-h-[320px] rounded-lg border border-orange-200/10 bg-slate-950/50 p-4 text-sm text-slate-100"
                     contentEditable
                     suppressContentEditableWarning
                     onInput={(event) =>
@@ -267,84 +310,49 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
-              {status ?? "Convert once to sync the latest Markdown output."}
+            <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 px-4 py-3 text-xs text-slate-400">
+              {status ??
+                "Tip: click Convert after edits to sync the latest Markdown output."}
             </div>
           </div>
         </section>
 
         <section className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-              Info
+          <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-5">
+            <p className="text-xs uppercase tracking-[0.3em] text-orange-200/70">
+              Plain text conversion
             </p>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              What is Markdown?
+            <h2 className="mt-3 text-lg font-semibold text-slate-100">
+              Clean plain text for SEO copy
             </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Markdown is a lightweight syntax for formatting text with simple
-              symbols for headings, lists, and emphasis.
+            <p className="mt-2 text-sm text-slate-300">
+              Use Mark2Text as an online Markdown to plain text converter when you need
+              readable website copy, meta descriptions, or marketing drafts without
+              formatting artifacts.
             </p>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-              Info
+          <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-5">
+            <p className="text-xs uppercase tracking-[0.3em] text-orange-200/70">
+              Client-side security
             </p>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              How Mark2Text works
+            <h2 className="mt-3 text-lg font-semibold text-slate-100">
+              Private conversion in your browser
             </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Paste Markdown, run Convert, then edit, copy, or download the
-              format you need.
-            </p>
-          </div>
-        </section>
-        <section className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-              Feature
-            </p>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Clean output
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Remove blank lines, links, and code blocks with toggles.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-              Feature
-            </p>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Editable previews
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Refine plain text, rich text, or HTML before sharing.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-              Feature
-            </p>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Share fast
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Copy or download in one click for any destination.
+            <p className="mt-2 text-sm text-slate-300">
+              All Markdown conversion happens locally on your device. No uploads, no
+              servers, and no tracking scripts—just fast Markdown cleanup and export.
             </p>
           </div>
         </section>
 
-        <footer className="flex flex-col items-center gap-3 border-t border-slate-200 pt-6 text-center text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
-          <span>Built by Fahim Reza — © 2026 All rights reserved.</span>
+        <footer className="flex flex-col items-center gap-3 border-t border-orange-200/10 pt-6 text-center text-xs text-slate-400">
+          <span>Mark2Text — a minimalist Markdown to text converter.</span>
           <div className="flex flex-wrap items-center justify-center gap-3 text-slate-400">
-            <span>x @ifahimreza</span>
-            <span aria-hidden="true">·</span>
-            <a className="hover:text-slate-600 dark:hover:text-slate-200" href="/privacy">
+            <a className="hover:text-orange-200" href="/privacy">
               Privacy Policy
             </a>
             <span aria-hidden="true">·</span>
-            <a className="hover:text-slate-600 dark:hover:text-slate-200" href="/terms">
+            <a className="hover:text-orange-200" href="/terms">
               Terms
             </a>
           </div>
