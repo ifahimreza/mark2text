@@ -4,7 +4,9 @@ import { useMemo, useState } from "react";
 import {
   applyCleanup,
   convertMarkdownToHtml,
+  htmlToMarkdown,
   markdownToPlainText,
+  plainTextToMarkdown,
   type CleanupOptions,
   wrapHtmlDocument
 } from "@/lib/convert";
@@ -13,13 +15,19 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 
 const DEFAULT_MARKDOWN = `# Mark2Text\n\nPaste Markdown on the left and grab the output on the right.\n\n- **Plain Text** strips formatting\n- **Rich Text** keeps formatting\n- **HTML** shows sanitized output\n\n\`\`\`js\nconsole.log("Hello, Markdown!");\n\`\`\``;
+const DEFAULT_SOURCE = `Paste plain text, HTML, or rich text here to convert back into Markdown.\n\nExample:\nProduct launches are fast.\nStay focused.`;
 
 type Tab = "plain" | "rich" | "html";
+type Mode = "markdown-to-text" | "source-to-markdown";
+type SourceFormat = "plain" | "rich" | "html";
 
 type OutputState = {
   plain: string;
   html: string;
   rich: string;
+};
+type ReverseOutputState = {
+  markdown: string;
 };
 
 const DEFAULT_CLEANUP: CleanupOptions = {
@@ -35,12 +43,29 @@ const buildOutputs = (markdown: string, cleanup: CleanupOptions): OutputState =>
   return { plain, html, rich: html };
 };
 
+const buildReverseOutput = (
+  sourceFormat: SourceFormat,
+  source: string
+): ReverseOutputState => {
+  if (sourceFormat === "plain") {
+    return { markdown: plainTextToMarkdown(source) };
+  }
+
+  return { markdown: htmlToMarkdown(source) };
+};
+
 export default function HomePage() {
+  const [mode, setMode] = useState<Mode>("markdown-to-text");
   const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
   const [activeTab, setActiveTab] = useState<Tab>("plain");
   const [cleanup, setCleanup] = useState<CleanupOptions>(DEFAULT_CLEANUP);
   const [outputs, setOutputs] = useState<OutputState>(() =>
     buildOutputs(DEFAULT_MARKDOWN, DEFAULT_CLEANUP)
+  );
+  const [sourceFormat, setSourceFormat] = useState<SourceFormat>("plain");
+  const [sourceInput, setSourceInput] = useState(DEFAULT_SOURCE);
+  const [reverseOutputs, setReverseOutputs] = useState<ReverseOutputState>(() =>
+    buildReverseOutput("plain", DEFAULT_SOURCE)
   );
   const [status, setStatus] = useState<string | null>(null);
 
@@ -56,15 +81,25 @@ export default function HomePage() {
     () => markdownToPlainText(cleanedMarkdown),
     [cleanedMarkdown]
   );
+  const generatedReverse = useMemo(
+    () => buildReverseOutput(sourceFormat, sourceInput).markdown,
+    [sourceFormat, sourceInput]
+  );
 
   const handleConvert = () => {
-    setOutputs({ plain: generatedPlain, html: generatedHtml, rich: generatedHtml });
+    if (mode === "markdown-to-text") {
+      setOutputs({ plain: generatedPlain, html: generatedHtml, rich: generatedHtml });
+    } else {
+      setReverseOutputs({ markdown: generatedReverse });
+    }
     setStatus("Converted.");
   };
 
   const handleCopy = async () => {
     try {
-      if (activeTab === "plain") {
+      if (mode === "source-to-markdown") {
+        await navigator.clipboard.writeText(reverseOutputs.markdown);
+      } else if (activeTab === "plain") {
         await navigator.clipboard.writeText(outputs.plain);
       } else if (activeTab === "html") {
         await navigator.clipboard.writeText(outputs.html);
@@ -87,6 +122,17 @@ export default function HomePage() {
   };
 
   const handleDownload = () => {
+    if (mode === "source-to-markdown") {
+      const blob = new Blob([reverseOutputs.markdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "mark2text.md";
+      anchor.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+
     const isPlain = activeTab === "plain";
     const filename = isPlain ? "mark2text.txt" : "mark2text.html";
     const content = isPlain ? outputs.plain : wrapHtmlDocument(outputs.html);
@@ -123,7 +169,7 @@ export default function HomePage() {
             <p className="mx-auto max-w-2xl text-base text-slate-300">
               A minimalist, client-side Markdown to text converter for fast, secure, and
               SEO-ready copy. Convert Markdown to clean plain text, rich text, or HTML in
-              your browser.
+              your browser, and flip text or HTML back into Markdown.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-300">
               <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
@@ -135,6 +181,9 @@ export default function HomePage() {
               <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
                 Plain text output
               </span>
+              <span className="rounded-full border border-orange-300/20 bg-orange-500/10 px-4 py-2">
+                HTML → Markdown
+              </span>
             </div>
           </div>
         </header>
@@ -142,10 +191,41 @@ export default function HomePage() {
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40">
-              <div className="flex items-center justify-between gap-3 border-b border-orange-200/10 px-4 py-3">
-                <span className="text-xs font-medium uppercase tracking-[0.2em] text-orange-200/60">
-                  Source input
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-orange-200/10 px-4 py-3">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-orange-200/60">
+                    Source input
+                  </span>
+                  <label className="flex items-center gap-2 text-xs text-slate-300">
+                    Conversion
+                    <select
+                      value={mode}
+                      onChange={(event) => setMode(event.target.value as Mode)}
+                      className="rounded-md border border-orange-200/20 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-100 shadow-none outline-none transition focus:border-orange-300"
+                    >
+                      <option value="markdown-to-text">Markdown → Text</option>
+                      <option value="source-to-markdown">
+                        Text/HTML → Markdown
+                      </option>
+                    </select>
+                  </label>
+                  {mode === "source-to-markdown" && (
+                    <label className="flex items-center gap-2 text-xs text-slate-300">
+                      Input format
+                      <select
+                        value={sourceFormat}
+                        onChange={(event) =>
+                          setSourceFormat(event.target.value as SourceFormat)
+                        }
+                        className="rounded-md border border-orange-200/20 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-100 shadow-none outline-none transition focus:border-orange-300"
+                      >
+                        <option value="plain">Plain Text</option>
+                        <option value="rich">Rich Text</option>
+                        <option value="html">HTML</option>
+                      </select>
+                    </label>
+                  )}
+                </div>
                 <Button
                   size="sm"
                   onClick={handleConvert}
@@ -155,56 +235,82 @@ export default function HomePage() {
                 </Button>
               </div>
               <div className="p-4">
-                <Textarea
-                  value={markdown}
-                  onChange={(event) => setMarkdown(event.target.value)}
-                  className="min-h-[360px] border-0 bg-transparent text-slate-100 shadow-none focus-visible:ring-0"
-                />
+                {mode === "markdown-to-text" && (
+                  <Textarea
+                    value={markdown}
+                    onChange={(event) => setMarkdown(event.target.value)}
+                    className="min-h-[360px] border-0 bg-transparent text-slate-100 shadow-none focus-visible:ring-0"
+                  />
+                )}
+                {mode === "source-to-markdown" && sourceFormat !== "rich" && (
+                  <Textarea
+                    value={sourceInput}
+                    onChange={(event) => setSourceInput(event.target.value)}
+                    className="min-h-[360px] border-0 bg-transparent font-mono text-sm text-slate-100 shadow-none focus-visible:ring-0"
+                  />
+                )}
+                {mode === "source-to-markdown" && sourceFormat === "rich" && (
+                  <div
+                    className="min-h-[360px] rounded-lg border border-orange-200/10 bg-slate-950/50 p-4 text-sm text-slate-100"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onInput={(event) =>
+                      setSourceInput(event.currentTarget.innerHTML)
+                    }
+                    dangerouslySetInnerHTML={{ __html: sourceInput }}
+                  />
+                )}
               </div>
             </div>
 
-            <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-4">
-              <div className="flex flex-wrap gap-6 text-sm text-slate-300">
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.removeExtraBlankLines}
-                    onCheckedChange={toggle("removeExtraBlankLines")}
-                  />
-                  Remove extra blank lines
-                </label>
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.stripLinks}
-                    onCheckedChange={toggle("stripLinks")}
-                  />
-                  Strip links but keep text
-                </label>
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.removeCodeBlocks}
-                    onCheckedChange={toggle("removeCodeBlocks")}
-                  />
-                  Remove code blocks
-                </label>
+            {mode === "markdown-to-text" && (
+              <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-4">
+                <div className="flex flex-wrap gap-6 text-sm text-slate-300">
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.removeExtraBlankLines}
+                      onCheckedChange={toggle("removeExtraBlankLines")}
+                    />
+                    Remove extra blank lines
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.stripLinks}
+                      onCheckedChange={toggle("stripLinks")}
+                    />
+                    Strip links but keep text
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.removeCodeBlocks}
+                      onCheckedChange={toggle("removeCodeBlocks")}
+                    />
+                    Remove code blocks
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-orange-200/15 bg-slate-950/40 p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <label className="flex items-center gap-2 text-sm text-slate-300">
-                  Output format
-                  <select
-                    value={activeTab}
-                    onChange={(event) => setActiveTab(event.target.value as Tab)}
-                    className="rounded-md border border-orange-200/20 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-100 shadow-none outline-none transition focus:border-orange-300"
-                  >
-                    <option value="plain">Plain Text</option>
-                    <option value="rich">Rich Text</option>
-                    <option value="html">HTML</option>
-                  </select>
-                </label>
+                {mode === "markdown-to-text" ? (
+                  <label className="flex items-center gap-2 text-sm text-slate-300">
+                    Output format
+                    <select
+                      value={activeTab}
+                      onChange={(event) => setActiveTab(event.target.value as Tab)}
+                      className="rounded-md border border-orange-200/20 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-100 shadow-none outline-none transition focus:border-orange-300"
+                    >
+                      <option value="plain">Plain Text</option>
+                      <option value="rich">Rich Text</option>
+                      <option value="html">HTML</option>
+                    </select>
+                  </label>
+                ) : (
+                  <span className="text-sm text-slate-300">Markdown output</span>
+                )}
                 <div className="flex flex-wrap items-center gap-2">
                   <Button
                     variant="secondary"
@@ -226,7 +332,16 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 rounded-xl border border-orange-200/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100">
-                {activeTab === "plain" && (
+                {mode === "source-to-markdown" && (
+                  <Textarea
+                    value={reverseOutputs.markdown}
+                    onChange={(event) =>
+                      setReverseOutputs({ markdown: event.target.value })
+                    }
+                    className="min-h-[320px] border-0 bg-transparent font-mono text-sm text-slate-100 shadow-none focus-visible:ring-0"
+                  />
+                )}
+                {mode === "markdown-to-text" && activeTab === "plain" && (
                   <Textarea
                     value={outputs.plain}
                     onChange={(event) =>
@@ -238,7 +353,7 @@ export default function HomePage() {
                     className="min-h-[320px] border-0 bg-transparent text-slate-100 shadow-none focus-visible:ring-0"
                   />
                 )}
-                {activeTab === "html" && (
+                {mode === "markdown-to-text" && activeTab === "html" && (
                   <Textarea
                     value={outputs.html}
                     onChange={(event) =>
@@ -250,7 +365,7 @@ export default function HomePage() {
                     className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-orange-100/80 shadow-none focus-visible:ring-0"
                   />
                 )}
-                {activeTab === "rich" && (
+                {mode === "markdown-to-text" && activeTab === "rich" && (
                   <div
                     className="min-h-[320px] rounded-lg border border-orange-200/10 bg-slate-950/50 p-4 text-sm text-slate-100"
                     contentEditable

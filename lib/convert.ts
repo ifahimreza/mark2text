@@ -4,6 +4,7 @@ import rehypeStringify from "rehype-stringify";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
+import TurndownService from "turndown";
 
 export type CleanupOptions = {
   removeExtraBlankLines: boolean;
@@ -64,6 +65,18 @@ export const markdownToPlainText = (markdown: string): string => {
   const text = toText(tree);
 
   return text.replace(/\n{3,}/g, "\n\n").trim();
+};
+
+export const plainTextToMarkdown = (text: string): string =>
+  text.replace(/\r\n/g, "\n").trim();
+
+export const htmlToMarkdown = (html: string): string => {
+  const turndownService = new TurndownService({
+    codeBlockStyle: "fenced",
+    headingStyle: "atx"
+  });
+
+  return turndownService.turndown(html).trim();
 };
 
 export const wrapHtmlDocument = (html: string) => `<!doctype html>
