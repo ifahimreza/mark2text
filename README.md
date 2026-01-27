@@ -1,19 +1,68 @@
 # Mark2Text
 
-Minimal one-page Markdown conversion tool built with Next.js (App Router), TypeScript, Tailwind, and shadcn/ui components.
+Mark2Text is a minimalist, client-side Markdown to text converter. It turns Markdown
+into clean plain text, rich text, or sanitized HTML in the browser—no uploads, no
+servers, and no tracking.
 
-## Install
+## Features
 
-```bash
-npm install next react react-dom remark remark-gfm remark-rehype rehype-stringify rehype-sanitize hast-util-to-text @radix-ui/react-tabs @radix-ui/react-checkbox class-variance-authority clsx tailwind-merge
-npm install -D typescript @types/react @types/react-dom @types/node tailwindcss postcss autoprefixer tailwindcss-animate
-```
+- **Client-side conversion** for privacy and speed.
+- **Plain, rich, and HTML outputs** with one click.
+- **Cleanup tools** to remove blank lines, strip links, or drop code blocks.
+- **Downloadable exports** for quick sharing.
 
-## Run locally
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+ (recommended)
+- npm
+
+### Install dependencies
 
 ```bash
 npm install
+```
+
+### Run the dev server
+
+```bash
 npm run dev
 ```
 
-Open <http://localhost:3000> to view the app.
+Open <http://localhost:3000> in your browser.
+
+### Build and start
+
+```bash
+npm run build
+npm run start
+```
+
+## Project structure
+
+```
+app/            # Next.js App Router routes and UI
+components/     # Reusable UI components
+lib/            # Markdown conversion utilities
+```
+
+## Security & privacy
+
+Mark2Text runs entirely in the browser. Markdown content never leaves your device,
+and HTML output is sanitized before rendering.
+
+## Contributing
+
+We welcome contributions! Here’s a simple workflow:
+
+1. Fork the repo and create a feature branch.
+2. Make your changes with clear, focused commits.
+3. Run any relevant checks (lint/tests if added).
+4. Open a pull request with a short summary and screenshots for UI changes.
+
+If you are not sure where to start, open an issue with your idea or a bug report.
+
+## License
+
+See [LICENSE](LICENSE).
