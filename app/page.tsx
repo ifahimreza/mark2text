@@ -402,47 +402,40 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="grid gap-6 md:grid-cols-2">
+        <section className="grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
-              Plain text conversion
+              Convert
             </p>
             <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
-              Clean plain text for SEO copy
+              Plain text output
             </h2>
             <p className="mt-2 text-sm text-[var(--page-muted)]">
-              Use Mark2Text as an online Markdown to plain text converter when you need
-              readable website copy, meta descriptions, or marketing drafts without
-              formatting artifacts.
+              Paste Markdown and get clean text.
             </p>
           </div>
           <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
-              Client-side security
+              Export
             </p>
             <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
-              Private conversion in your browser
+              Copy Markdown or HTML
             </h2>
             <p className="mt-2 text-sm text-[var(--page-muted)]">
-              All Markdown conversion happens locally on your device. No uploads, no
-              servers, and no tracking scripts—just fast Markdown cleanup and export.
+              Grab the format you need.
             </p>
           </div>
-        </section>
-
-        <section className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-6 shadow-sm">
-          <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
-            AI-ready workflow note
-          </p>
-          <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
-            Why teams prep AI briefs in Markdown
-          </h2>
-          <p className="mt-2 text-sm text-[var(--page-muted)]">
-            Markdown keeps AI prompts readable for humans, easy to diff in version control,
-            and structured enough to guide LLMs with headings, lists, and code blocks.
-            Mark2Text helps you strip that formatting when you need plain copy for docs,
-            emails, or product summaries.
-          </p>
+          <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
+              Private
+            </p>
+            <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
+              Stays in your browser
+            </h2>
+            <p className="mt-2 text-sm text-[var(--page-muted)]">
+              No uploads or tracking.
+            </p>
+          </div>
         </section>
 
         <footer className="flex flex-col items-center gap-3 border-t border-[var(--page-border-soft)] pt-6 text-center text-xs text-[var(--page-muted-2)]">
