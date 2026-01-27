@@ -4,7 +4,9 @@ import { useMemo, useState } from "react";
 import {
   applyCleanup,
   convertMarkdownToHtml,
+  htmlToMarkdown,
   markdownToPlainText,
+  textToMarkdown,
   type CleanupOptions,
   wrapHtmlDocument
 } from "@/lib/convert";
@@ -13,6 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 
 type Tab = "plain" | "rich" | "html";
+type Mode = "markdown-to-text" | "to-markdown";
+type ReverseInput = "plain" | "rich" | "html";
 
 type OutputState = {
   plain: string;
@@ -26,15 +30,13 @@ const DEFAULT_CLEANUP: CleanupOptions = {
   removeCodeBlocks: false
 };
 
-const buildOutputs = (markdown: string, cleanup: CleanupOptions): OutputState => {
-  const cleaned = applyCleanup(markdown, cleanup);
-  const html = convertMarkdownToHtml(cleaned);
-  const plain = markdownToPlainText(cleaned);
-  return { plain, html, rich: html };
-};
-
 export default function HomePage() {
   const [markdown, setMarkdown] = useState("");
+  const [mode, setMode] = useState<Mode>("markdown-to-text");
+  const [reverseInput, setReverseInput] = useState<ReverseInput>("plain");
+  const [reverseSource, setReverseSource] = useState("");
+  const [reverseRichSource, setReverseRichSource] = useState("");
+  const [reverseOutput, setReverseOutput] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>("plain");
   const [cleanup, setCleanup] = useState<CleanupOptions>(DEFAULT_CLEANUP);
   const [outputs, setOutputs] = useState<OutputState>({
@@ -58,12 +60,30 @@ export default function HomePage() {
   );
 
   const handleConvert = () => {
-    setOutputs({ plain: generatedPlain, html: generatedHtml, rich: generatedHtml });
-    setStatus("Converted.");
+    if (mode === "markdown-to-text") {
+      setOutputs({ plain: generatedPlain, html: generatedHtml, rich: generatedHtml });
+      setStatus("Converted.");
+      return;
+    }
+
+    const source =
+      reverseInput === "rich" ? reverseRichSource : reverseSource;
+    const markdownOutput =
+      reverseInput === "plain"
+        ? textToMarkdown(source)
+        : htmlToMarkdown(source);
+    setReverseOutput(markdownOutput);
+    setStatus("Converted to Markdown.");
   };
 
   const handleCopy = async () => {
     try {
+      if (mode === "to-markdown") {
+        await navigator.clipboard.writeText(reverseOutput);
+        setStatus("Copied to clipboard.");
+        return;
+      }
+
       if (activeTab === "plain") {
         await navigator.clipboard.writeText(outputs.plain);
       } else if (activeTab === "html") {
@@ -87,6 +107,17 @@ export default function HomePage() {
   };
 
   const handleDownload = () => {
+    if (mode === "to-markdown") {
+      const blob = new Blob([reverseOutput], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "mark2text.md";
+      anchor.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+
     const isPlain = activeTab === "plain";
     const filename = isPlain ? "mark2text.txt" : "mark2text.html";
     const content = isPlain ? outputs.plain : wrapHtmlDocument(outputs.html);
@@ -140,70 +171,141 @@ export default function HomePage() {
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-[#c9e2ff] bg-white shadow-sm">
-              <div className="flex items-center justify-between gap-3 border-b border-[#dbeeff] px-4 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dbeeff] px-4 py-3">
                 <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#5a7190]">
                   Source input
                 </span>
-                <Button
-                  size="sm"
-                  onClick={handleConvert}
-                  className="bg-[#0285ff] text-white hover:bg-[#0270d6]"
-                >
-                  Convert
-                </Button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="flex items-center gap-2 text-xs text-[#355070]">
+                    Mode
+                    <select
+                      value={mode}
+                      onChange={(event) =>
+                        setMode(event.target.value as Mode)
+                      }
+                      className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                    >
+                      <option value="markdown-to-text">
+                        Markdown → Text/HTML
+                      </option>
+                      <option value="to-markdown">
+                        Text/HTML → Markdown
+                      </option>
+                    </select>
+                  </label>
+                  {mode === "to-markdown" && (
+                    <label className="flex items-center gap-2 text-xs text-[#355070]">
+                      Input
+                      <select
+                        value={reverseInput}
+                        onChange={(event) =>
+                          setReverseInput(event.target.value as ReverseInput)
+                        }
+                        className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                      >
+                        <option value="plain">Plain Text</option>
+                        <option value="rich">Rich Text</option>
+                        <option value="html">HTML</option>
+                      </select>
+                    </label>
+                  )}
+                  <Button
+                    size="sm"
+                    onClick={handleConvert}
+                    className="bg-[#0285ff] text-white hover:bg-[#0270d6]"
+                  >
+                    Convert
+                  </Button>
+                </div>
               </div>
               <div className="p-4">
-                <Textarea
-                  value={markdown}
-                  onChange={(event) => setMarkdown(event.target.value)}
-                  placeholder="Paste your Markdown here..."
-                  className="min-h-[360px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
-                />
+                {mode === "markdown-to-text" && (
+                  <Textarea
+                    value={markdown}
+                    onChange={(event) => setMarkdown(event.target.value)}
+                    placeholder="Paste your Markdown here..."
+                    className="min-h-[360px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                  />
+                )}
+                {mode === "to-markdown" && reverseInput !== "rich" && (
+                  <Textarea
+                    value={reverseSource}
+                    onChange={(event) => setReverseSource(event.target.value)}
+                    placeholder={
+                      reverseInput === "plain"
+                        ? "Paste your plain text here..."
+                        : "Paste your HTML here..."
+                    }
+                    className="min-h-[360px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                  />
+                )}
+                {mode === "to-markdown" && reverseInput === "rich" && (
+                  <div
+                    className="rich-output min-h-[360px] rounded-lg border border-[#dbeeff] bg-white p-4 text-sm text-[#00284d]"
+                    contentEditable
+                    suppressContentEditableWarning
+                    data-placeholder="Paste or type rich text here..."
+                    onInput={(event) =>
+                      setReverseRichSource(event.currentTarget.innerHTML)
+                    }
+                    dangerouslySetInnerHTML={{ __html: reverseRichSource }}
+                  />
+                )}
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#c9e2ff] bg-white p-4 shadow-sm">
-              <div className="flex flex-wrap gap-6 text-sm text-[#355070]">
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.removeExtraBlankLines}
-                    onCheckedChange={toggle("removeExtraBlankLines")}
-                  />
-                  Remove extra blank lines
-                </label>
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.stripLinks}
-                    onCheckedChange={toggle("stripLinks")}
-                  />
-                  Strip links but keep text
-                </label>
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={cleanup.removeCodeBlocks}
-                    onCheckedChange={toggle("removeCodeBlocks")}
-                  />
-                  Remove code blocks
-                </label>
+            {mode === "markdown-to-text" && (
+              <div className="rounded-2xl border border-[#c9e2ff] bg-white p-4 shadow-sm">
+                <div className="flex flex-wrap gap-6 text-sm text-[#355070]">
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.removeExtraBlankLines}
+                      onCheckedChange={toggle("removeExtraBlankLines")}
+                    />
+                    Remove extra blank lines
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.stripLinks}
+                      onCheckedChange={toggle("stripLinks")}
+                    />
+                    Strip links but keep text
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <Checkbox
+                      checked={cleanup.removeCodeBlocks}
+                      onCheckedChange={toggle("removeCodeBlocks")}
+                    />
+                    Remove code blocks
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-[#c9e2ff] bg-white p-5 shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <label className="flex items-center gap-2 text-sm text-[#355070]">
-                  Output format
-                  <select
-                    value={activeTab}
-                    onChange={(event) => setActiveTab(event.target.value as Tab)}
-                    className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
-                  >
-                    <option value="plain">Plain Text</option>
-                    <option value="rich">Rich Text</option>
-                    <option value="html">HTML</option>
-                  </select>
-                </label>
+                {mode === "markdown-to-text" ? (
+                  <label className="flex items-center gap-2 text-sm text-[#355070]">
+                    Output format
+                    <select
+                      value={activeTab}
+                      onChange={(event) =>
+                        setActiveTab(event.target.value as Tab)
+                      }
+                      className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                    >
+                      <option value="plain">Plain Text</option>
+                      <option value="rich">Rich Text</option>
+                      <option value="html">HTML</option>
+                    </select>
+                  </label>
+                ) : (
+                  <span className="text-sm font-medium text-[#355070]">
+                    Markdown output
+                  </span>
+                )}
                 <div className="flex flex-wrap items-center gap-2">
                   <Button
                     variant="secondary"
@@ -225,45 +327,57 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 rounded-xl border border-[#dbeeff] bg-[#f8fbff] px-4 py-3 text-sm text-[#00284d]">
-                {activeTab === "plain" && (
-                  <Textarea
-                    value={outputs.plain}
-                    onChange={(event) =>
-                      setOutputs((prev) => ({
-                        ...prev,
-                        plain: event.target.value
-                      }))
-                    }
-                    placeholder="Plain text output will appear here."
-                    className="min-h-[320px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
-                  />
+                {mode === "markdown-to-text" && (
+                  <>
+                    {activeTab === "plain" && (
+                      <Textarea
+                        value={outputs.plain}
+                        onChange={(event) =>
+                          setOutputs((prev) => ({
+                            ...prev,
+                            plain: event.target.value
+                          }))
+                        }
+                        placeholder="Plain text output will appear here."
+                        className="min-h-[320px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                      />
+                    )}
+                    {activeTab === "html" && (
+                      <Textarea
+                        value={outputs.html}
+                        onChange={(event) =>
+                          setOutputs((prev) => ({
+                            ...prev,
+                            html: event.target.value
+                          }))
+                        }
+                        placeholder="HTML output will appear here."
+                        className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[#355070] shadow-none focus-visible:ring-0"
+                      />
+                    )}
+                    {activeTab === "rich" && (
+                      <div
+                        className="rich-output min-h-[320px] rounded-lg border border-[#dbeeff] bg-white p-4 text-sm text-[#00284d]"
+                        contentEditable
+                        suppressContentEditableWarning
+                        data-placeholder="Rich text output will appear here."
+                        onInput={(event) =>
+                          setOutputs((prev) => ({
+                            ...prev,
+                            rich: event.currentTarget.innerHTML
+                          }))
+                        }
+                        dangerouslySetInnerHTML={{ __html: outputs.rich }}
+                      />
+                    )}
+                  </>
                 )}
-                {activeTab === "html" && (
+                {mode === "to-markdown" && (
                   <Textarea
-                    value={outputs.html}
-                    onChange={(event) =>
-                      setOutputs((prev) => ({
-                        ...prev,
-                        html: event.target.value
-                      }))
-                    }
-                    placeholder="HTML output will appear here."
+                    value={reverseOutput}
+                    onChange={(event) => setReverseOutput(event.target.value)}
+                    placeholder="Markdown output will appear here."
                     className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[#355070] shadow-none focus-visible:ring-0"
-                  />
-                )}
-                {activeTab === "rich" && (
-                  <div
-                    className="rich-output min-h-[320px] rounded-lg border border-[#dbeeff] bg-white p-4 text-sm text-[#00284d]"
-                    contentEditable
-                    suppressContentEditableWarning
-                    data-placeholder="Rich text output will appear here."
-                    onInput={(event) =>
-                      setOutputs((prev) => ({
-                        ...prev,
-                        rich: event.currentTarget.innerHTML
-                      }))
-                    }
-                    dangerouslySetInnerHTML={{ __html: outputs.rich }}
                   />
                 )}
               </div>
