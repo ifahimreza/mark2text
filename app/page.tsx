@@ -319,8 +319,22 @@ export default function HomePage() {
                     variant="outline"
                     size="sm"
                     onClick={handleDownload}
-                    className="border-[#c9e2ff] text-[#00284d] hover:bg-[#e5f3ff]"
+                    className="group flex items-center gap-2 border-[#0285ff] bg-[#0285ff] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0270d6] focus-visible:ring-[#8cc5ff]"
                   >
+                    <svg
+                      aria-hidden="true"
+                      className="h-4 w-4 transition group-hover:-translate-y-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 3v12m0 0 4-4m-4 4-4-4m-6 7h16"
+                      />
+                    </svg>
                     Download
                   </Button>
                 </div>
