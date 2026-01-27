@@ -137,31 +137,31 @@ export default function HomePage() {
       setCleanup((prev) => ({ ...prev, [key]: Boolean(checked) }));
 
   return (
-    <main className="relative min-h-screen bg-[#f5f9ff] px-4 py-12 text-[#00284d] sm:px-6 lg:px-10">
+    <main className="relative min-h-screen bg-[var(--page-bg)] px-4 py-12 text-[var(--page-text)] sm:px-6 lg:px-10">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-[-220px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#0285ff]/15 blur-[180px]" />
-        <div className="absolute bottom-[-200px] right-[-120px] h-[440px] w-[440px] rounded-full bg-[#e5f3ff] blur-[200px]" />
+        <div className="absolute left-1/2 top-[-220px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[color:var(--page-primary)]/15 blur-[180px]" />
+        <div className="absolute bottom-[-200px] right-[-120px] h-[440px] w-[440px] rounded-full bg-[var(--page-surface-accent)] blur-[200px]" />
       </div>
 
       <div className="relative mx-auto flex w-full max-w-[860px] flex-col gap-10">
         <header className="flex flex-col items-center gap-8 text-center">
           <div className="space-y-4">
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-              <span className="title-main">Mark2Text</span>
+            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+              <span className="title-main logo-text">Mark2Text</span>
             </h1>
-            <p className="mx-auto max-w-2xl text-base text-[#355070]">
+            <p className="mx-auto max-w-2xl text-base text-[var(--page-muted)]">
               A minimalist, client-side Markdown to text converter for fast, secure, and
               SEO-ready copy. Convert Markdown to clean plain text, rich text, or HTML in
               your browser.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[#355070]">
-              <span className="rounded-full border border-[#c9e2ff] bg-white px-4 py-2 shadow-sm">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[var(--page-muted)]">
+              <span className="rounded-full border border-[var(--page-border)] bg-[var(--page-surface)] px-4 py-2 shadow-sm">
                 Client-side only
               </span>
-              <span className="rounded-full border border-[#c9e2ff] bg-white px-4 py-2 shadow-sm">
+              <span className="rounded-full border border-[var(--page-border)] bg-[var(--page-surface)] px-4 py-2 shadow-sm">
                 No uploads or tracking
               </span>
-              <span className="rounded-full border border-[#c9e2ff] bg-white px-4 py-2 shadow-sm">
+              <span className="rounded-full border border-[var(--page-border)] bg-[var(--page-surface)] px-4 py-2 shadow-sm">
                 Plain text output
               </span>
             </div>
@@ -170,20 +170,20 @@ export default function HomePage() {
 
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
-            <div className="rounded-2xl border border-[#c9e2ff] bg-white shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dbeeff] px-4 py-3">
-                <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#5a7190]">
+            <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--page-border-soft)] px-4 py-3">
+                <span className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--page-muted-2)]">
                   Source input
                 </span>
                 <div className="flex flex-wrap items-center gap-3">
-                  <label className="flex items-center gap-2 text-xs text-[#355070]">
+                  <label className="flex items-center gap-2 text-xs text-[var(--page-muted)]">
                     Mode
                     <select
                       value={mode}
                       onChange={(event) =>
                         setMode(event.target.value as Mode)
                       }
-                      className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                      className="rounded-md border border-[var(--page-border)] bg-[var(--page-surface)] px-3 py-1 text-xs font-medium text-[var(--page-text)] shadow-none outline-none transition focus:border-[var(--page-primary)]"
                     >
                       <option value="markdown-to-text">
                         Markdown → Text/HTML
@@ -194,14 +194,14 @@ export default function HomePage() {
                     </select>
                   </label>
                   {mode === "to-markdown" && (
-                    <label className="flex items-center gap-2 text-xs text-[#355070]">
+                    <label className="flex items-center gap-2 text-xs text-[var(--page-muted)]">
                       Input
                       <select
                         value={reverseInput}
                         onChange={(event) =>
                           setReverseInput(event.target.value as ReverseInput)
                         }
-                        className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                        className="rounded-md border border-[var(--page-border)] bg-[var(--page-surface)] px-3 py-1 text-xs font-medium text-[var(--page-text)] shadow-none outline-none transition focus:border-[var(--page-primary)]"
                       >
                         <option value="plain">Plain Text</option>
                         <option value="rich">Rich Text</option>
@@ -212,7 +212,7 @@ export default function HomePage() {
                   <Button
                     size="sm"
                     onClick={handleConvert}
-                    className="bg-[#0285ff] text-white hover:bg-[#0270d6]"
+                    className="bg-[var(--page-primary)] text-white hover:bg-[var(--page-primary-hover)]"
                   >
                     Convert
                   </Button>
@@ -224,7 +224,7 @@ export default function HomePage() {
                     value={markdown}
                     onChange={(event) => setMarkdown(event.target.value)}
                     placeholder="Paste your Markdown here..."
-                    className="min-h-[360px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                    className="min-h-[360px] border-0 bg-transparent text-[var(--page-text)] shadow-none focus-visible:ring-0"
                   />
                 )}
                 {mode === "to-markdown" && reverseInput !== "rich" && (
@@ -236,12 +236,12 @@ export default function HomePage() {
                         ? "Paste your plain text here..."
                         : "Paste your HTML here..."
                     }
-                    className="min-h-[360px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                    className="min-h-[360px] border-0 bg-transparent text-[var(--page-text)] shadow-none focus-visible:ring-0"
                   />
                 )}
                 {mode === "to-markdown" && reverseInput === "rich" && (
                   <div
-                    className="rich-output min-h-[360px] rounded-lg border border-[#dbeeff] bg-white p-4 text-sm text-[#00284d]"
+                    className="rich-output min-h-[360px] rounded-lg border border-[var(--page-border-soft)] bg-[var(--page-surface)] p-4 text-sm text-[var(--page-text)]"
                     contentEditable
                     suppressContentEditableWarning
                     data-placeholder="Paste or type rich text here..."
@@ -255,8 +255,8 @@ export default function HomePage() {
             </div>
 
             {mode === "markdown-to-text" && (
-              <div className="rounded-2xl border border-[#c9e2ff] bg-white p-4 shadow-sm">
-                <div className="flex flex-wrap gap-6 text-sm text-[#355070]">
+              <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-4 shadow-sm">
+                <div className="flex flex-wrap gap-6 text-sm text-[var(--page-muted)]">
                   <label className="flex items-center gap-2">
                     <Checkbox
                       checked={cleanup.removeExtraBlankLines}
@@ -284,17 +284,17 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="rounded-2xl border border-[#c9e2ff] bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 {mode === "markdown-to-text" ? (
-                  <label className="flex items-center gap-2 text-sm text-[#355070]">
+                  <label className="flex items-center gap-2 text-sm text-[var(--page-muted)]">
                     Output format
                     <select
                       value={activeTab}
                       onChange={(event) =>
                         setActiveTab(event.target.value as Tab)
                       }
-                      className="rounded-md border border-[#c9e2ff] bg-white px-3 py-1 text-xs font-medium text-[#00284d] shadow-none outline-none transition focus:border-[#0285ff]"
+                      className="rounded-md border border-[var(--page-border)] bg-[var(--page-surface)] px-3 py-1 text-xs font-medium text-[var(--page-text)] shadow-none outline-none transition focus:border-[var(--page-primary)]"
                     >
                       <option value="plain">Plain Text</option>
                       <option value="rich">Rich Text</option>
@@ -302,7 +302,7 @@ export default function HomePage() {
                     </select>
                   </label>
                 ) : (
-                  <span className="text-sm font-medium text-[#355070]">
+                  <span className="text-sm font-medium text-[var(--page-muted)]">
                     Markdown output
                   </span>
                 )}
@@ -311,7 +311,7 @@ export default function HomePage() {
                     variant="secondary"
                     size="sm"
                     onClick={handleCopy}
-                    className="bg-[#e5f3ff] text-[#00284d] hover:bg-[#d4ebff]"
+                    className="bg-[var(--page-surface-accent)] text-[var(--page-text)] hover:bg-[var(--page-surface-accent-hover)]"
                   >
                     Copy
                   </Button>
@@ -319,7 +319,7 @@ export default function HomePage() {
                     variant="outline"
                     size="sm"
                     onClick={handleDownload}
-                    className="group flex items-center gap-2 border-[#0285ff] bg-[#0285ff] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0270d6] focus-visible:ring-[#8cc5ff]"
+                    className="group flex items-center gap-2 border-[var(--page-border)] bg-[var(--page-surface-accent-2)] text-[var(--page-text)] transition hover:-translate-y-0.5 hover:border-[var(--page-border)] hover:bg-[var(--page-surface-accent)] focus-visible:ring-[var(--page-ring)]"
                   >
                     <svg
                       aria-hidden="true"
@@ -340,7 +340,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-[#dbeeff] bg-[#f8fbff] px-4 py-3 text-sm text-[#00284d]">
+              <div className="mt-4 rounded-xl border border-[var(--page-border-soft)] bg-[var(--page-surface-muted)] px-4 py-3 text-sm text-[var(--page-text)]">
                 {mode === "markdown-to-text" && (
                   <>
                     {activeTab === "plain" && (
@@ -353,7 +353,7 @@ export default function HomePage() {
                           }))
                         }
                         placeholder="Plain text output will appear here."
-                        className="min-h-[320px] border-0 bg-transparent text-[#00284d] shadow-none focus-visible:ring-0"
+                        className="min-h-[320px] border-0 bg-transparent text-[var(--page-text)] shadow-none focus-visible:ring-0"
                       />
                     )}
                     {activeTab === "html" && (
@@ -366,12 +366,12 @@ export default function HomePage() {
                           }))
                         }
                         placeholder="HTML output will appear here."
-                        className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[#355070] shadow-none focus-visible:ring-0"
+                        className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[var(--page-muted)] shadow-none focus-visible:ring-0"
                       />
                     )}
                     {activeTab === "rich" && (
                       <div
-                        className="rich-output min-h-[320px] rounded-lg border border-[#dbeeff] bg-white p-4 text-sm text-[#00284d]"
+                        className="rich-output min-h-[320px] rounded-lg border border-[var(--page-border-soft)] bg-[var(--page-surface)] p-4 text-sm text-[var(--page-text)]"
                         contentEditable
                         suppressContentEditableWarning
                         data-placeholder="Rich text output will appear here."
@@ -391,54 +391,54 @@ export default function HomePage() {
                     value={reverseOutput}
                     onChange={(event) => setReverseOutput(event.target.value)}
                     placeholder="Markdown output will appear here."
-                    className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[#355070] shadow-none focus-visible:ring-0"
+                    className="min-h-[320px] border-0 bg-transparent font-mono text-xs text-[var(--page-muted)] shadow-none focus-visible:ring-0"
                   />
                 )}
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#c9e2ff] bg-white px-4 py-3 text-xs text-[#5a7190] shadow-sm">
+            <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] px-4 py-3 text-xs text-[var(--page-muted-2)] shadow-sm">
               {status ?? "Convert once to sync the latest Markdown output."}
             </div>
           </div>
         </section>
 
         <section className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-[#c9e2ff] bg-white p-5 shadow-sm">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#5a7190]">
+          <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
               Plain text conversion
             </p>
-            <h2 className="mt-3 text-lg font-semibold text-[#00284d]">
+            <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
               Clean plain text for SEO copy
             </h2>
-            <p className="mt-2 text-sm text-[#355070]">
+            <p className="mt-2 text-sm text-[var(--page-muted)]">
               Use Mark2Text as an online Markdown to plain text converter when you need
               readable website copy, meta descriptions, or marketing drafts without
               formatting artifacts.
             </p>
           </div>
-          <div className="rounded-2xl border border-[#c9e2ff] bg-white p-5 shadow-sm">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#5a7190]">
+          <div className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-5 shadow-sm">
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
               Client-side security
             </p>
-            <h2 className="mt-3 text-lg font-semibold text-[#00284d]">
+            <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
               Private conversion in your browser
             </h2>
-            <p className="mt-2 text-sm text-[#355070]">
+            <p className="mt-2 text-sm text-[var(--page-muted)]">
               All Markdown conversion happens locally on your device. No uploads, no
               servers, and no tracking scripts—just fast Markdown cleanup and export.
             </p>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[#c9e2ff] bg-white p-6 shadow-sm">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#5a7190]">
+        <section className="rounded-2xl border border-[var(--page-border)] bg-[var(--page-surface)] p-6 shadow-sm">
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--page-muted-2)]">
             AI-ready workflow note
           </p>
-          <h2 className="mt-3 text-lg font-semibold text-[#00284d]">
+          <h2 className="mt-3 text-lg font-semibold text-[var(--page-text)]">
             Why teams prep AI briefs in Markdown
           </h2>
-          <p className="mt-2 text-sm text-[#355070]">
+          <p className="mt-2 text-sm text-[var(--page-muted)]">
             Markdown keeps AI prompts readable for humans, easy to diff in version control,
             and structured enough to guide LLMs with headings, lists, and code blocks.
             Mark2Text helps you strip that formatting when you need plain copy for docs,
@@ -446,21 +446,21 @@ export default function HomePage() {
           </p>
         </section>
 
-        <footer className="flex flex-col items-center gap-3 border-t border-[#dbeeff] pt-6 text-center text-xs text-[#5a7190]">
+        <footer className="flex flex-col items-center gap-3 border-t border-[var(--page-border-soft)] pt-6 text-center text-xs text-[var(--page-muted-2)]">
           <span>Mark2Text — a minimalist Markdown to text converter.</span>
-          <div className="flex flex-wrap items-center justify-center gap-3 text-[#5a7190]">
-            <a className="hover:text-[#0285ff]" href="/privacy">
+          <div className="flex flex-wrap items-center justify-center gap-3 text-[var(--page-muted-2)]">
+            <a className="hover:text-[var(--page-primary)]" href="/privacy">
               Privacy Policy
             </a>
             <span aria-hidden="true">·</span>
-            <a className="hover:text-[#0285ff]" href="/terms">
+            <a className="hover:text-[var(--page-primary)]" href="/terms">
               Terms
             </a>
           </div>
           <span>
-            Credits: Fahim Reza ·{" "}
+            Made with tea and care by Fahim Reza ·{" "}
             <a
-              className="hover:text-[#0285ff]"
+              className="hover:text-[var(--page-primary)]"
               href="https://x.com/ifahimreza"
               rel="noreferrer"
               target="_blank"

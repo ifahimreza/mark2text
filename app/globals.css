@@ -7,6 +7,58 @@
   --text-primary: #00284d;
   --coral-bright: #0285ff;
   --cyan-bright: #7cc6ff;
+  --page-bg: #f5f9ff;
+  --page-text: #00284d;
+  --page-muted: #355070;
+  --page-muted-2: #5a7190;
+  --page-border: #c9e2ff;
+  --page-border-soft: #dbeeff;
+  --page-surface: #ffffff;
+  --page-surface-muted: #f8fbff;
+  --page-surface-accent: #e5f3ff;
+  --page-surface-accent-hover: #d4ebff;
+  --page-surface-accent-2: #f2f7ff;
+  --page-primary: #0285ff;
+  --page-primary-hover: #0270d6;
+  --page-ring: #8cc5ff;
+  --rich-text: #0f2e4a;
+  --rich-heading: #00284d;
+  --rich-code-bg: #f1f5fb;
+  --rich-blockquote-bg: #f2f7ff;
+  --rich-blockquote-text: #3a5674;
+  --rich-code-text: #1a3b5d;
+  --rich-hr: #dbeeff;
+  --rich-table-header: #f2f7ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #e6efff;
+    --coral-bright: #4aa3ff;
+    --cyan-bright: #8cc5ff;
+    --page-bg: #0b1220;
+    --page-text: #e6efff;
+    --page-muted: #b3c0d6;
+    --page-muted-2: #91a4c2;
+    --page-border: #24344d;
+    --page-border-soft: #2d3f5c;
+    --page-surface: #111b2e;
+    --page-surface-muted: #0f1829;
+    --page-surface-accent: #17243a;
+    --page-surface-accent-hover: #1e2d45;
+    --page-surface-accent-2: #17243a;
+    --page-primary: #4aa3ff;
+    --page-primary-hover: #2d8fff;
+    --page-ring: #4aa3ff;
+    --rich-text: #d9e6f7;
+    --rich-heading: #f0f6ff;
+    --rich-code-bg: #162338;
+    --rich-blockquote-bg: #17243a;
+    --rich-blockquote-text: #b5c7df;
+    --rich-code-text: #d5e6ff;
+    --rich-hr: #2d3f5c;
+    --rich-table-header: #162338;
+  }
 }
 
 @keyframes gradientShift {
@@ -38,7 +90,138 @@
   animation: gradientShift 6s ease infinite;
 }
 
+.logo-text {
+  font-family: var(--font-fira-sans), "Fira Sans", "Inter", "Segoe UI", system-ui,
+    -apple-system, sans-serif;
+  font-weight: 700;
+}
+
 .rich-output:empty::before {
   content: attr(data-placeholder);
-  color: #5a7190;
+  color: var(--page-muted-2);
+}
+
+.rich-output {
+  color: var(--rich-text);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.rich-output * {
+  box-sizing: border-box;
+}
+
+.rich-output :where(h1, h2, h3, h4, h5, h6) {
+  margin: 1.5rem 0 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--rich-heading);
+}
+
+.rich-output h1 {
+  font-size: 2rem;
+}
+
+.rich-output h2 {
+  font-size: 1.75rem;
+}
+
+.rich-output h3 {
+  font-size: 1.5rem;
+}
+
+.rich-output h4 {
+  font-size: 1.25rem;
+}
+
+.rich-output h5 {
+  font-size: 1.1rem;
+}
+
+.rich-output h6 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rich-output :where(p, ul, ol, pre, blockquote, table) {
+  margin: 0 0 1rem;
+}
+
+.rich-output :where(ul, ol) {
+  padding-left: 1.5rem;
+}
+
+.rich-output li {
+  margin-bottom: 0.4rem;
+}
+
+.rich-output blockquote {
+  border-left: 3px solid var(--page-border);
+  padding-left: 1rem;
+  color: var(--rich-blockquote-text);
+  background: var(--rich-blockquote-bg);
+  border-radius: 0.5rem;
+}
+
+.rich-output code {
+  font-family: "JetBrains Mono", "SFMono-Regular", ui-monospace, SFMono-Regular,
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  background: var(--rich-code-bg);
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.35rem;
+  color: var(--rich-code-text);
+}
+
+.rich-output pre {
+  background: var(--rich-code-bg);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--rich-code-text);
+}
+
+.rich-output pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.rich-output a {
+  color: var(--page-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rich-output hr {
+  border: none;
+  border-top: 1px solid var(--rich-hr);
+  margin: 1.5rem 0;
+}
+
+.rich-output table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.rich-output th,
+.rich-output td {
+  border: 1px solid var(--page-border-soft);
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+}
+
+.rich-output th {
+  background: var(--rich-table-header);
+  font-weight: 600;
+}
+
+.rich-output
+  :where(h1, h2, h3, h4, h5, h6, p, ul, ol, pre, blockquote, table):last-child {
+  margin-bottom: 0;
 }

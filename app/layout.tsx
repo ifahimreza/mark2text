@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Fira_Sans } from "next/font/google";
 import "./globals.css";
+
+const firaSans = Fira_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-fira-sans"
+});
 
 export const metadata: Metadata = {
   title: "Mark2Text | Markdown to Text Converter",
@@ -22,7 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+      <body
+        className={`${firaSans.variable} min-h-screen bg-[var(--page-bg)] text-[var(--page-text)] antialiased`}
+      >
         {children}
       </body>
     </html>
