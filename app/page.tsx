@@ -146,12 +146,11 @@ export default function HomePage() {
       <div className="relative mx-auto flex w-full max-w-[860px] flex-col gap-10">
         <header className="flex flex-col items-center gap-8 text-center">
           <div className="space-y-4">
-            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="text-6xl font-bold tracking-tight sm:text-6xl">
               <span className="title-main logo-text">Mark2Text</span>
             </h1>
             <p className="mx-auto max-w-2xl text-base text-[var(--page-muted)]">
-              A minimalist, client-side Markdown to text converter for fast, secure, and
-              SEO-ready copy. Convert Markdown to clean plain text, rich text, or HTML in
+              A minimalist, client-side Markdown to text converter for fast and secure. Convert Markdown to clean plain text, rich text, or HTML in
               your browser.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[var(--page-muted)]">
