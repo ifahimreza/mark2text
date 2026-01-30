@@ -1,9 +1,13 @@
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,600,700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light dark;
+  --font-satoshi: "Satoshi";
+  --font-clash-display: "Clash Display";
   --text-primary: #00284d;
   --coral-bright: #0285ff;
   --cyan-bright: #7cc6ff;
@@ -29,6 +33,11 @@
   --rich-code-text: #1a3b5d;
   --rich-hr: #dbeeff;
   --rich-table-header: #f2f7ff;
+}
+
+body {
+  font-family: var(--font-satoshi), "Inter", "Segoe UI", system-ui,
+    -apple-system, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -84,6 +93,8 @@
     var(--cyan-bright) 100%
   );
   background-size: 200% 200%;
+  font-family: var(--font-clash-display), var(--font-satoshi), "Inter",
+    "Segoe UI", system-ui, -apple-system, sans-serif;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -91,8 +102,8 @@
 }
 
 .logo-text {
-  font-family: var(--font-fira-sans), "Fira Sans", "Inter", "Segoe UI", system-ui,
-    -apple-system, sans-serif;
+  font-family: var(--font-clash-display), var(--font-satoshi), "Inter",
+    "Segoe UI", system-ui, -apple-system, sans-serif;
   font-weight: 700;
 }
 
@@ -105,7 +116,8 @@
   color: var(--rich-text);
   font-size: 1rem;
   line-height: 1.7;
-  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-satoshi), "Inter", "Segoe UI", system-ui,
+    -apple-system, sans-serif;
   letter-spacing: 0.01em;
 }
 
@@ -118,6 +130,8 @@
   font-weight: 600;
   line-height: 1.3;
   color: var(--rich-heading);
+  font-family: var(--font-clash-display), var(--font-satoshi), "Inter",
+    "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 .rich-output h1 {
